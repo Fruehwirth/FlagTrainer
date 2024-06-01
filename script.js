@@ -50,8 +50,8 @@ function checkAnswer(selectedOption) {
         button.disabled = true; // Disable buttons after answer
     });
 
-    // Automatically move to the next flag after 2 seconds
-    setTimeout(nextFlag, 2000);
+    // Automatically move to the next flag after 1 second
+    setTimeout(nextFlag, 1000);
 }
 
 // Event listener for each option
