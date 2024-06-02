@@ -29,4 +29,4 @@ You will need a modern web browser to run this application. No additional softwa
 1. Clone the repository:
 
 ```sh
-git clone https://github.com/your-username/flag-trainer.git
+git clone https://github.com/fruehwirth/flagtrainer.git
