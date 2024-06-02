@@ -4,7 +4,20 @@ let currentFlag;
 let correctOption;
 const flagImg = document.getElementById('flag');
 const options = document.querySelectorAll('.option');
+const languageSelect = document.getElementById('language-select');
+let translations = {};
 
+// Load translations for the selected language
+async function loadTranslations(language) {
+    try {
+        const response = await fetch(`translations/${language}.json`);
+        translations = await response.json();
+    } catch (error) {
+        console.error("Error loading translations:", error);
+    }
+}
+
+// Fetch flags data
 async function fetchFlags() {
     try {
         const response = await fetch('flags.json');
@@ -16,6 +29,7 @@ async function fetchFlags() {
     }
 }
 
+// Update the flag and options
 function nextFlag() {
     if (remainingFlags.length === 0) {
         remainingFlags = [...flags]; // Refill the remaining flags
@@ -35,15 +49,16 @@ function nextFlag() {
     correctOption = Math.floor(Math.random() * 4);
     options.forEach((button, index) => {
         if (index === correctOption) {
-            button.textContent = currentFlag.country;
+            button.textContent = translations[currentFlag.country] || currentFlag.country;
         } else {
-            button.textContent = incorrectOptions.pop().country;
+            button.textContent = translations[incorrectOptions.pop().country] || incorrectOptions.pop().country;
         }
         button.classList.remove('correct', 'incorrect'); // Reset classes
         button.disabled = false; // Enable buttons
     });
 }
 
+// Check the answer and update the UI
 function checkAnswer(selectedOption) {
     // Highlight correct and incorrect options
     options.forEach((button, index) => {
@@ -72,5 +87,17 @@ options.forEach((button, index) => {
     button.addEventListener('click', () => checkAnswer(index));
 });
 
-// Load the flags data and the first flag
-fetchFlags();
+// Event listener for language selection
+languageSelect.addEventListener('change', async (event) => {
+    const language = event.target.value;
+    await loadTranslations(language);
+    nextFlag(); // Refresh the current flag and options with the new language
+    const flag = languageSelect.options[languageSelect.selectedIndex].getAttribute('data-flag');
+    languageSelect.style.backgroundImage = `url('https://flagsapi.com/${flag}/shiny/24.png')`;
+});
+
+// Load the initial language and flags data
+(async () => {
+    await loadTranslations('en'); // Default to English
+    fetchFlags();
+})();
