@@ -39,6 +39,19 @@ h1 {
     text-align: center;
 }
 
+#score-container {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+#score {
+    font-size: 18px;
+    color: #333;
+}
+
 #language-select {
     padding: 8px 12px;
     border: 1px solid #ccc;
@@ -72,6 +85,10 @@ h1 {
     .container {
         background-color: #1e1e1e;
         box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+    }
+
+    #score {
+        color: #e0e0e0;
     }
 
     #language-select {

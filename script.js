@@ -2,9 +2,12 @@ let flags = [];
 let remainingFlags = [];
 let currentFlag;
 let correctOption;
+let correctCount = 0; // Track the number of correct answers
+let totalCount = 0; // Track the total number of questions
 const flagImg = document.getElementById('flag');
 const options = document.querySelectorAll('.option');
 const languageSelect = document.getElementById('language-select');
+const scoreLabel = document.getElementById('score'); // Get the score label element
 let translations = {};
 
 // Load translations for the selected language
@@ -41,6 +44,8 @@ function nextFlag() {
     // Pick a random flag from remaining flags
     currentFlag = shuffledFlags[0];
     flagImg.src = currentFlag.url;
+    flagImg.onload = () => console.log(`Loaded: ${currentFlag.url}`);
+    flagImg.onerror = () => console.error(`Error loading flag: ${currentFlag.url}`);
 
     // Pick three random incorrect options from the full list excluding the current flag
     const incorrectOptions = flags.filter(f => f !== currentFlag).sort(() => 0.5 - Math.random()).slice(0, 3);
@@ -51,15 +56,23 @@ function nextFlag() {
         if (index === correctOption) {
             button.textContent = translations[currentFlag.country] || currentFlag.country;
         } else {
-            button.textContent = translations[incorrectOptions.pop().country] || incorrectOptions.pop().country;
+            const incorrectOption = incorrectOptions.pop();
+            button.textContent = translations[incorrectOption.country] || incorrectOption.country;
         }
         button.classList.remove('correct', 'incorrect'); // Reset classes
         button.disabled = false; // Enable buttons
     });
 }
 
+// Update the score display
+function updateScore() {
+    const percentage = Math.round((correctCount / totalCount) * 100);
+    scoreLabel.textContent = `Score: ${percentage}%`;
+}
+
 // Check the answer and update the UI
 function checkAnswer(selectedOption) {
+    totalCount++;
     // Highlight correct and incorrect options
     options.forEach((button, index) => {
         if (index === correctOption) {
@@ -75,8 +88,11 @@ function checkAnswer(selectedOption) {
 
     // Remove the flag from the remaining flags if the answer is correct
     if (selectedOption === correctOption) {
+        correctCount++;
         remainingFlags = remainingFlags.filter(f => f !== currentFlag);
     }
+
+    updateScore(); // Update the score after checking the answer
 
     // Automatically move to the next flag after 1 second
     setTimeout(nextFlag, 1000);
@@ -93,7 +109,7 @@ languageSelect.addEventListener('change', async (event) => {
     await loadTranslations(language);
     nextFlag(); // Refresh the current flag and options with the new language
     const flag = languageSelect.options[languageSelect.selectedIndex].getAttribute('data-flag');
-    languageSelect.style.backgroundImage = `url('https://flagsapi.com/${flag}/shiny/24.png')`;
+    languageSelect.style.backgroundImage = `url('https://flagsapi.com/${flag}/flat/24.png')`;
 });
 
 // Load the initial language and flags data
