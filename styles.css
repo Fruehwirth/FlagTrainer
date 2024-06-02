@@ -39,6 +39,7 @@ body {
     max-width: 100%;
     max-height: 100%;
     position: absolute;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Increased shadow around the image */
 }
 
 #options {
@@ -49,22 +50,25 @@ body {
     align-items: center;
 }
 
-.option {
+button.option {
     width: 100%;
     max-width: 500px;
     padding: 14px;
     margin: 10px 0;
     font-size: 18px;
-    background-color: #007BFF;
+    background-color: rgb(85, 85, 85); /* Updated button background color */
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 16px;
 }
 
-.option:hover {
-    background-color: #0056b3;
+button.option.correct {
+    background-color: green;
+}
+
+button.option.incorrect {
+    background-color: red;
 }
 
 /* Media Queries for Mobile Devices */
@@ -84,5 +88,17 @@ body {
 
     #flag-container {
         height: 300px;
+    }
+
+    button.option {
+        font-size: 20px;
+        padding: 16px;
+    }
+}
+
+/* Apply hover styles only on devices that can hover */
+@media (hover: hover) {
+    button.option:hover {
+        background-color: rgb(50, 50, 50);
     }
 }
