@@ -1,3 +1,5 @@
+/* Light mode styles (default) */
+
 body {
     font-family: Arial, sans-serif;
     background-color: #f0f0f0;
@@ -7,6 +9,7 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
+    text-align: center;
 }
 
 .container {
@@ -21,6 +24,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    text-align: center; /* Ensure text alignment within the container */
 }
 
 #flag-container {
@@ -63,15 +67,17 @@ button.option {
     cursor: pointer;
 }
 
-button.option.correct {
-    background-color: green;
+button.option.correct,
+button.option.correct:hover {
+    background-color: green !important;
 }
 
-button.option.incorrect {
-    background-color: red;
+button.option.incorrect,
+button.option.incorrect:hover {
+    background-color: red !important;
 }
 
-/* Media Queries for Mobile Devices */
+/* Disable hover effect on mobile devices */
 @media (max-width: 600px) {
     body {
         height: auto;
@@ -94,11 +100,55 @@ button.option.incorrect {
         font-size: 20px;
         padding: 16px;
     }
+
+    button.option:hover {
+        background-color: rgb(85, 85, 85); /* Same as the normal background color */
+    }
+
+    @media (prefers-color-scheme: dark) {
+        button.option:hover {
+            background-color: rgb(100, 100, 100); /* Same as the normal background color in dark mode */
+        }
+    }
 }
 
 /* Apply hover styles only on devices that can hover */
 @media (hover: hover) {
-    button.option:hover {
+    button.option:hover:not(.correct):not(.incorrect) {
         background-color: rgb(50, 50, 50);
+    }
+
+    @media (prefers-color-scheme: dark) {
+        button.option:hover:not(.correct):not(.incorrect) {
+            background-color: rgb(150, 150, 150); /* Lighter hover color for dark mode */
+        }
+    }
+}
+
+/* Dark mode styles */
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: #121212;
+        color: #e0e0e0;
+    }
+
+    .container {
+        background-color: #1e1e1e;
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+    }
+
+    button.option {
+        background-color: rgb(100, 100, 100); /* Dark mode button background color */
+        color: white;
+    }
+
+    button.option.correct,
+    button.option.correct:hover {
+        background-color: #00c851 !important; /* Darker green for dark mode */
+    }
+
+    button.option.incorrect,
+    button.option.incorrect:hover {
+        background-color: #ff4444 !important; /* Darker red for dark mode */
     }
 }
