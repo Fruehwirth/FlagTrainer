@@ -19,6 +19,7 @@
 <body>
     <div class="container">
         <div class="header">
+            <button id="mode-button">Mode</button>
             <h1>Flag Trainer</h1>
             <select id="language-select">
                 <option value="en" data-flag="GB">English</option>
@@ -38,6 +39,26 @@
             <button class="option"></button>
         </div>
     </div>
+    
+    <div id="mode-overlay" class="hidden">
+        <div class="mode-container">
+            <h2>Select Mode (WIP)</h2>
+            <label>
+                <input type="radio" name="mode" value="easy">
+                Easy
+            </label>
+            <label>
+                <input type="radio" name="mode" value="medium">
+                Medium
+            </label>
+            <label>
+                <input type="radio" name="mode" value="hard">
+                Hard
+            </label>
+            <button id="close-mode">Close</button>
+        </div>
+    </div>
+    
     <script src="script.js"></script>
 </body>
 </html>

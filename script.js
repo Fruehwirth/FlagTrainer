@@ -8,6 +8,9 @@ const flagImg = document.getElementById('flag');
 const options = document.querySelectorAll('.option');
 const languageSelect = document.getElementById('language-select');
 const scoreLabel = document.getElementById('score'); // Get the score label element
+const modeButton = document.getElementById('mode-button');
+const modeOverlay = document.getElementById('mode-overlay');
+const closeModeButton = document.getElementById('close-mode');
 let translations = {};
 
 // Load translations for the selected language
@@ -47,6 +50,11 @@ function nextFlag() {
     flagImg.onload = () => console.log(`Loaded: ${currentFlag.url}`);
     flagImg.onerror = () => console.error(`Error loading flag: ${currentFlag.url}`);
 
+    updateOptions();
+}
+
+// Update the options based on the current translations and current flag
+function updateOptions() {
     // Pick three random incorrect options from the full list excluding the current flag
     const incorrectOptions = flags.filter(f => f !== currentFlag).sort(() => 0.5 - Math.random()).slice(0, 3);
 
@@ -107,9 +115,26 @@ options.forEach((button, index) => {
 languageSelect.addEventListener('change', async (event) => {
     const language = event.target.value;
     await loadTranslations(language);
-    nextFlag(); // Refresh the current flag and options with the new language
+    updateOptions(); // Refresh the current options with the new language
     const flag = languageSelect.options[languageSelect.selectedIndex].getAttribute('data-flag');
-    languageSelect.style.backgroundImage = `url('https://flagsapi.com/${flag}/flat/24.png')`;
+    languageSelect.style.backgroundImage = `url('https://flagsapi.com/${flag.toLowerCase()}/shiny/24.png')`;
+});
+
+// Event listener for mode button
+modeButton.addEventListener('click', () => {
+    modeOverlay.classList.remove('hidden');
+});
+
+// Event listener for close mode button
+closeModeButton.addEventListener('click', () => {
+    modeOverlay.classList.add('hidden');
+});
+
+// Event listener for background click
+modeOverlay.addEventListener('click', (event) => {
+    if (event.target === modeOverlay) {
+        modeOverlay.classList.add('hidden');
+    }
 });
 
 // Load the initial language and flags data
