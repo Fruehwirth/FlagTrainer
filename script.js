@@ -117,7 +117,7 @@ languageSelect.addEventListener('change', async (event) => {
     await loadTranslations(language);
     updateOptions(); // Refresh the current options with the new language
     const flag = languageSelect.options[languageSelect.selectedIndex].getAttribute('data-flag');
-    languageSelect.style.backgroundImage = `url('https://flagsapi.com/${flag.toLowerCase()}/shiny/24.png')`;
+    languageSelect.style.backgroundImage = `url('https://flagcdn.com/${flag.toLowerCase()}.svg')`;
 });
 
 // Event listener for mode button
