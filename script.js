@@ -16,7 +16,7 @@
     let totalCount = 0;
     let translations = {};
     const translationCache = {};
-    let selectedPlaysets = []; // Corrected variable name
+    let selectedPlaysets = ['africa', 'asia', 'europe', 'north_america', 'south_america', 'oceania']; // Default to all playsets
 
     // Function to update the language flag
     function updateLanguageFlag() {
@@ -49,9 +49,8 @@
             let allFlags = [];
 
             if (selectedPlaysets.length === 0) {
-                // Default to all playsets
-                const response = await fetch('playsets/all.json');
-                allFlags = await response.json();
+                alert('Please select at least one playset.');
+                return;
             } else {
                 // Fetch flags for selected playsets
                 for (const playset of selectedPlaysets) {
@@ -208,7 +207,7 @@
     // Load the initial language and flags data
     (async () => {
         await loadTranslations('en'); // Default to English
-        selectedPlaysets = []; // Default to all playsets
+        // selectedPlaysets is already initialized with all playsets
         fetchFlags();
     })();
 
