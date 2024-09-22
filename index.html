@@ -42,22 +42,38 @@
     
     <div id="mode-overlay" class="hidden">
         <div class="mode-container">
-            <h2>Select Mode (WIP)</h2>
-            <label>
-                <input type="radio" name="mode" value="easy">
-                Easy
-            </label>
-            <label>
-                <input type="radio" name="mode" value="medium">
-                Medium
-            </label>
-            <label>
-                <input type="radio" name="mode" value="hard">
-                Hard
-            </label>
+            <h2>Select Continents</h2>
+            <form id="playset-form">
+                <label>
+                    <input type="checkbox" name="playset" value="africa">
+                    Africa
+                </label>
+                <label>
+                    <input type="checkbox" name="playset" value="asia">
+                    Asia
+                </label>
+                <label>
+                    <input type="checkbox" name="playset" value="europe">
+                    Europe
+                </label>
+                <label>
+                    <input type="checkbox" name="playset" value="north_america">
+                    North America
+                </label>
+                <label>
+                    <input type="checkbox" name="playset" value="south_america">
+                    South America
+                </label>
+                <label>
+                    <input type="checkbox" name="playset" value="oceania">
+                    Oceania
+                </label>
+            </form>
+            <button id="apply-mode">Apply</button>
             <button id="close-mode">Close</button>
         </div>
     </div>
+    
     
     <script src="script.js"></script>
 </body>

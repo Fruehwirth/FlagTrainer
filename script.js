@@ -6,6 +6,7 @@
     const modeButton = document.getElementById('mode-button');
     const modeOverlay = document.getElementById('mode-overlay');
     const closeModeButton = document.getElementById('close-mode');
+    const applyModeButton = document.getElementById('apply-mode');
 
     let flags = [];
     let remainingFlags = [];
@@ -15,6 +16,7 @@
     let totalCount = 0;
     let translations = {};
     const translationCache = {};
+    let selectedPlaysets = []; // Corrected variable name
 
     // Function to update the language flag
     function updateLanguageFlag() {
@@ -41,11 +43,25 @@
         }
     }
 
-    // Fetch flags data
+    // Fetch flags data based on selected playsets
     async function fetchFlags() {
         try {
-            const response = await fetch('flags.json');
-            flags = await response.json();
+            let allFlags = [];
+
+            if (selectedPlaysets.length === 0) {
+                // Default to all playsets
+                const response = await fetch('playsets/all.json');
+                allFlags = await response.json();
+            } else {
+                // Fetch flags for selected playsets
+                for (const playset of selectedPlaysets) {
+                    const response = await fetch(`playsets/${playset}.json`);
+                    const playsetFlags = await response.json();
+                    allFlags = allFlags.concat(playsetFlags);
+                }
+            }
+
+            flags = allFlags;
             remainingFlags = [...flags];
             preloadFlags();
             nextFlag();
@@ -73,7 +89,11 @@
     // Update the flag and options
     function nextFlag() {
         if (remainingFlags.length === 0) {
-            remainingFlags = [...flags];
+            alert('No more flags in the selected playsets. Restarting...');
+            remainingFlags = [...flags]; // Reset the flags
+            correctCount = 0;
+            totalCount = 0;
+            updateScore();
         }
         shuffle(remainingFlags);
         currentFlag = remainingFlags[0];
@@ -156,12 +176,29 @@
         modeOverlay.classList.remove('hidden');
     });
 
+    // Event listener for apply mode button
+    applyModeButton.addEventListener('click', () => {
+        const checkboxes = document.querySelectorAll('input[name="playset"]:checked');
+        selectedPlaysets = Array.from(checkboxes).map(checkbox => checkbox.value);
+
+        if (selectedPlaysets.length === 0) {
+            alert('Please select at least one playset.');
+            return;
+        }
+
+        modeOverlay.classList.add('hidden');
+        correctCount = 0;
+        totalCount = 0;
+        updateScore();
+        fetchFlags(); // Reload flags based on the selected playsets
+    });
+
     // Event listener for close mode button
     closeModeButton.addEventListener('click', () => {
         modeOverlay.classList.add('hidden');
     });
 
-    // Event listener for background click
+    // Event listener for background click to close overlay
     modeOverlay.addEventListener('click', (event) => {
         if (event.target === modeOverlay) {
             modeOverlay.classList.add('hidden');
@@ -170,7 +207,8 @@
 
     // Load the initial language and flags data
     (async () => {
-        await loadTranslations('en');
+        await loadTranslations('en'); // Default to English
+        selectedPlaysets = []; // Default to all playsets
         fetchFlags();
     })();
 
