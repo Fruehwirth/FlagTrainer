@@ -8,7 +8,6 @@
     const closeSettingsButton = document.getElementById('close-settings');
     const applySettingsButton = document.getElementById('apply-settings');
     const answerInput = document.getElementById('answer-input');
-    const suggestionsContainer = document.getElementById('suggestions');
     const quizOptionsContainer = document.getElementById('quiz-options');
     const typeInputContainer = document.getElementById('type-input-container');
 
@@ -22,6 +21,8 @@
     const translationCache = {};
     let selectedPlaysets = ['africa', 'asia', 'europe', 'north_america', 'south_america', 'oceania']; // Default to all playsets
     let gameMode = 'quiz'; // Default mode
+
+    let countries; // Typeahead dataset
 
     // Function to update the language flag
     function updateLanguageFlag() {
@@ -114,7 +115,7 @@
             typeInputContainer.classList.add('hidden');
         } else if (gameMode === 'type') {
             answerInput.value = '';
-            suggestionsContainer.innerHTML = '';
+            $('#answer-input').typeahead('val', '');
             quizOptionsContainer.classList.add('hidden');
             typeInputContainer.classList.remove('hidden');
             answerInput.focus();
@@ -146,9 +147,10 @@
     }
 
     // Show feedback overlay
-    function showFeedback(isCorrect) {
+    function showFeedback(isCorrect, correctCountryName = '') {
         const feedbackOverlay = document.getElementById('feedback-overlay');
         const feedbackIcon = document.getElementById('feedback-icon');
+        const feedbackText = document.getElementById('feedback-text');
 
         feedbackOverlay.classList.remove('correct', 'incorrect');
         feedbackOverlay.classList.add(isCorrect ? 'correct' : 'incorrect');
@@ -156,13 +158,22 @@
 
         if (isCorrect) {
             feedbackIcon.textContent = 'check_circle'; // Material symbol for checkmark
+            feedbackText.textContent = '';
+            feedbackText.classList.add('hidden');
         } else {
             feedbackIcon.textContent = 'cancel'; // Material symbol for cross
+            if (correctCountryName) {
+                feedbackText.textContent = correctCountryName;
+                feedbackText.classList.remove('hidden');
+            } else {
+                feedbackText.textContent = '';
+                feedbackText.classList.add('hidden');
+            }
         }
     }
 
     // Check the answer and update the UI
-    function checkAnswer(selectedOption) {
+    function checkAnswer(selectedOption = null) {
         totalCount++;
 
         if (gameMode === 'quiz') {
@@ -196,12 +207,60 @@
             if (isCorrect) {
                 correctCount++;
                 remainingFlags = remainingFlags.filter(f => f !== currentFlag);
+                showFeedback(true);
+            } else {
+                const correctCountryName = translations[currentFlag.country] || currentFlag.country;
+                showFeedback(false, correctCountryName);
             }
 
-            showFeedback(isCorrect);
             updateScore();
-
+            $('#answer-input').typeahead('close'); // Close the suggestion menu
             setTimeout(nextFlag, 1500);
+        }
+    }
+
+    // Initialize typeahead
+    function initializeTypeahead() {
+        const countryNames = Object.values(translations);
+
+        if (countries) {
+            countries.clear();
+            countries.local = countryNames;
+            countries.initialize(true);
+        } else {
+            countries = new Bloodhound({
+                datumTokenizer: Bloodhound.tokenizers.whitespace,
+                queryTokenizer: Bloodhound.tokenizers.whitespace,
+                local: countryNames
+            });
+
+            $('#answer-input').typeahead(
+                {
+                    hint: false, // Hide the hint input field
+                    highlight: true,
+                    minLength: 1
+                },
+                {
+                    name: 'countries',
+                    source: countries
+                }
+            );
+
+            // Handle selection from suggestions
+            $('#answer-input').bind('typeahead:select', function(ev, suggestion) {
+                answerInput.value = suggestion;
+                $('#answer-input').typeahead('close'); // Close the suggestion menu
+                checkAnswer();
+            });
+
+            // Handle pressing Enter
+            $('#answer-input').keydown(function(event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    $('#answer-input').typeahead('close'); // Close the suggestion menu
+                    checkAnswer();
+                }
+            });
         }
     }
 
@@ -215,50 +274,15 @@
         }
     });
 
-    // Event listener for answer input in Type mode
-    answerInput.addEventListener('input', () => {
-        const query = answerInput.value.trim().toLowerCase();
-        suggestionsContainer.innerHTML = '';
-
-        if (query.length === 0) {
-            return;
-        }
-
-        const suggestions = Object.values(translations).filter(countryName => countryName.toLowerCase().includes(query));
-
-        suggestions.slice(0, 5).forEach(suggestion => {
-            const div = document.createElement('div');
-            div.textContent = suggestion;
-            suggestionsContainer.appendChild(div);
-        });
-    });
-
-    // Event listener for clicking on suggestions
-    suggestionsContainer.addEventListener('click', (event) => {
-        if (event.target.tagName === 'DIV') {
-            answerInput.value = event.target.textContent;
-            suggestionsContainer.innerHTML = '';
-            checkAnswer();
-        }
-    });
-
-    // Event listener for pressing Enter in the answer input
-    answerInput.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter') {
-            event.preventDefault();
-            suggestionsContainer.innerHTML = '';
-            checkAnswer();
-        }
-    });
-
     // Event listener for language selection
     languageSelect.addEventListener('change', async (event) => {
         const language = event.target.value;
         await loadTranslations(language);
+        updateLanguageFlag();
+        initializeTypeahead(); // Reinitialize typeahead with new translations
         if (gameMode === 'quiz') {
             updateOptions();
         }
-        updateLanguageFlag();
     });
 
     // Set the initial language flag on page load
@@ -304,6 +328,7 @@
     // Load the initial language and flags data
     (async () => {
         await loadTranslations('en'); // Default to English
+        initializeTypeahead();
         fetchFlags();
     })();
 
