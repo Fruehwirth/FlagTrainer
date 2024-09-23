@@ -161,10 +161,22 @@
         const feedbackOverlay = document.getElementById('feedback-overlay');
         const feedbackIcon = document.getElementById('feedback-icon');
         const feedbackText = document.getElementById('feedback-text');
+        const flagImage = document.getElementById('flag');
+
+        // Get current displayed width and height of the flag image
+        const flagRect = flagImage.getBoundingClientRect();
+        const flagWidth = flagRect.width;
+        const flagHeight = flagRect.height;
+
+        // Set the overlay size to match the flag image
+        feedbackOverlay.style.width = `${flagWidth}px`;
+        feedbackOverlay.style.height = `${flagHeight}px`;
+        feedbackOverlay.style.top = '50%';
+        feedbackOverlay.style.left = '50%';
+        feedbackOverlay.style.transform = 'translate(-50%, -50%)';
 
         feedbackOverlay.classList.remove('correct', 'incorrect');
         feedbackOverlay.classList.add(isCorrect ? 'correct' : 'incorrect');
-        feedbackOverlay.classList.remove('hidden');
 
         if (isCorrect) {
             feedbackIcon.textContent = 'check_circle'; // Material symbol for checkmark
@@ -180,6 +192,16 @@
                 feedbackText.classList.add('hidden');
             }
         }
+
+        // Show the overlay
+        feedbackOverlay.classList.remove('hidden');
+
+        // Optionally, set a timeout to hide the overlay after a delay
+        setTimeout(() => {
+            feedbackOverlay.classList.add('hidden');
+            // Proceed to the next flag or reset as needed
+            nextFlag();
+        }, 1500); // 1.5 seconds delay
     }
 
     // Check the answer and update the UI
@@ -207,8 +229,8 @@
             showFeedback(isCorrect);
             updateScore();
 
-            setTimeout(nextFlag, 1500);
-
+            // Automatically move to the next flag after feedback
+            // (Handled inside showFeedback)
         } else if (gameMode === 'type') {
             const answer = answerInput.value.trim().toLowerCase();
             const correctAnswer = (translations[currentFlag.country] || currentFlag.country).toLowerCase();
@@ -226,7 +248,8 @@
 
             updateScore();
             $('#answer-input').typeahead('close'); // Close the suggestion menu
-            setTimeout(nextFlag, 1500);
+            // Automatically move to the next flag after feedback
+            // (Handled inside showFeedback)
         }
     }
 
@@ -307,6 +330,7 @@
     // Event listener for settings button
     settingsButton.addEventListener('click', () => {
         settingsOverlay.classList.remove('hidden');
+        closeSettingsButton.focus(); // Set focus to close button for accessibility
     });
 
     // Event listener for close settings button (Icon)
@@ -317,6 +341,13 @@
     // Event listener for background click to close overlay
     settingsOverlay.addEventListener('click', (event) => {
         if (event.target === settingsOverlay) {
+            settingsOverlay.classList.add('hidden');
+        }
+    });
+
+    // Event listener for Escape key to close overlay
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && !settingsOverlay.classList.contains('hidden')) {
             settingsOverlay.classList.add('hidden');
         }
     });
