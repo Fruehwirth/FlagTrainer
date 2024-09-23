@@ -6,7 +6,6 @@
     const settingsButton = document.getElementById('settings-button');
     const settingsOverlay = document.getElementById('settings-overlay');
     const closeSettingsButton = document.getElementById('close-settings');
-    const applySettingsButton = document.getElementById('apply-settings');
     const answerInput = document.getElementById('answer-input');
     const quizOptionsContainer = document.getElementById('quiz-options');
     const typeInputContainer = document.getElementById('type-input-container');
@@ -24,7 +23,7 @@
 
     let countries; // Typeahead dataset
 
-    // Function to update the language flag
+    // Function to update the language flag in the language select
     function updateLanguageFlag() {
         const flag = languageSelect.options[languageSelect.selectedIndex].getAttribute('data-flag');
         const flagUrl = `https://flagcdn.com/${flag.toLowerCase()}.svg`;
@@ -42,6 +41,9 @@
         }
         try {
             const response = await fetch(`translations/${language}.json`);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
             translations = await response.json();
             translationCache[language] = translations;
         } catch (error) {
@@ -61,6 +63,9 @@
                 // Fetch flags for selected playsets
                 for (const playset of selectedPlaysets) {
                     const response = await fetch(`playsets/${playset}.json`);
+                    if (!response.ok) {
+                        throw new Error(`Failed to fetch playset ${playset}: ${response.status}`);
+                    }
                     const playsetFlags = await response.json();
                     allFlags = allFlags.concat(playsetFlags);
                 }
@@ -299,35 +304,12 @@
         initializeTypeahead(); // Reinitialize typeahead with new translations
     });
 
-    // Set the initial language flag on page load
-    updateLanguageFlag();
-
     // Event listener for settings button
     settingsButton.addEventListener('click', () => {
         settingsOverlay.classList.remove('hidden');
     });
 
-    // Event listener for apply settings button
-    applySettingsButton.addEventListener('click', () => {
-        const playsetCheckboxes = document.querySelectorAll('input[name="playset"]:checked');
-        selectedPlaysets = Array.from(playsetCheckboxes).map(checkbox => checkbox.value);
-
-        const modeRadio = document.querySelector('input[name="game-mode"]:checked');
-        gameMode = modeRadio.value;
-
-        if (selectedPlaysets.length === 0) {
-            alert('Please select at least one playset.');
-            return;
-        }
-
-        settingsOverlay.classList.add('hidden');
-        correctCount = 0;
-        totalCount = 0;
-        updateScore();
-        fetchFlags(); // Reload flags based on the selected playsets and mode
-    });
-
-    // Event listener for close settings button
+    // Event listener for close settings button (Icon)
     closeSettingsButton.addEventListener('click', () => {
         settingsOverlay.classList.add('hidden');
     });
@@ -339,11 +321,65 @@
         }
     });
 
+    // Event listeners for game mode changes
+    function handleGameModeChange() {
+        if (gameMode === 'quiz') {
+            quizOptionsContainer.classList.remove('hidden');
+            typeInputContainer.classList.add('hidden');
+            updateOptions();
+        } else if (gameMode === 'type') {
+            quizOptionsContainer.classList.add('hidden');
+            typeInputContainer.classList.remove('hidden');
+            answerInput.value = '';
+            $('#answer-input').typeahead('val', '');
+            answerInput.focus();
+        }
+    }
+
+    // Event listeners for playset checkboxes
+    const playsetCheckboxes = document.querySelectorAll('input[name="playset"]');
+    playsetCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', () => {
+            // Update selected playsets
+            selectedPlaysets = Array.from(playsetCheckboxes)
+                .filter(cb => cb.checked)
+                .map(cb => cb.value);
+
+            if (selectedPlaysets.length === 0) {
+                alert('Please select at least one playset.');
+                // Re-check the checkbox that was just unchecked
+                checkbox.checked = true;
+                selectedPlaysets.push(checkbox.value);
+                return;
+            }
+
+            // Reset score
+            correctCount = 0;
+            totalCount = 0;
+            updateScore();
+
+            // Fetch new flags based on updated playsets
+            fetchFlags();
+        });
+    });
+
+    // Event listeners for game mode radio buttons
+    const gameModeRadios = document.querySelectorAll('input[name="game-mode"]');
+    gameModeRadios.forEach(radio => {
+        radio.addEventListener('change', () => {
+            if (radio.checked) {
+                gameMode = radio.value;
+                handleGameModeChange();
+            }
+        });
+    });
+
     // Load the initial language and flags data
     (async () => {
         await loadTranslations('en'); // Default to English
         initializeTypeahead();
         fetchFlags();
+        updateLanguageFlag();
     })();
 
 })();

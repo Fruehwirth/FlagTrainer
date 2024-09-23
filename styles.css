@@ -1,3 +1,4 @@
+/* General Styles */
 body {
     font-family: Arial, sans-serif;
     background-color: #f0f0f0;
@@ -28,24 +29,21 @@ h1 {
     left: 20px;
     font-size: 36px;
     cursor: pointer;
-    color: #333;
+    color: #333; /* Light color for light mode */
 }
 
 #language-select {
+    width: 115px; /* Fixed width as per request */
     padding: 8px 12px;
+    font-size: 16px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    background-color: #f9f9f9;
-    font-size: 16px;
     appearance: none;
-    background-image: url('https://flagcdn.com/gb.svg');
     background-repeat: no-repeat;
     background-position: right 10px center;
     background-size: 24px;
     padding-right: 40px;
     cursor: pointer;
-    position: absolute;
-    right: 20px;
 }
 
 #language-select option {
@@ -73,17 +71,21 @@ h1 {
 }
 
 .flag-wrapper {
-    display: block;
-    position: relative;
+    display: flex; /* Changed from block to flex for better centering */
+    justify-content: center;
+    align-items: center;
     width: 100%;
     max-width: 500px;
+    height: 300px; /* Fixed height to constrain the flag */
     margin: 0 auto;
+    overflow: hidden; /* Hide any overflow to maintain dimensions */
+    position: relative; /* Added to contain the absolutely positioned overlay */
 }
 
 .flag-wrapper img {
-    display: block;
-    width: 100%;
-    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain; /* Maintain aspect ratio without stretching */
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
 }
 
@@ -98,6 +100,7 @@ h1 {
     justify-content: center;
     align-items: center;
     background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent to dim the flag */
+    z-index: 10; /* Ensure it's above the flag image */
 }
 
 #feedback-overlay.correct {
@@ -149,6 +152,7 @@ button.option {
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 button.option.correct,
@@ -236,6 +240,7 @@ button.option.incorrect:hover {
     text-align: center;
     max-width: 90%;
     width: 400px;
+    position: relative; /* To position the close icon */
 }
 
 .settings-container h2 {
@@ -254,14 +259,83 @@ button.option.incorrect:hover {
     font-size: 16px;
 }
 
-.settings-container button {
-    margin-top: 10px;
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: white;
-    border: none;
+.settings-container select {
+    width: 115px; /* Fixed width as per request */
+    padding: 8px 12px;
+    font-size: 16px;
+    border: 1px solid #ccc;
     border-radius: 5px;
+    appearance: none;
+    background-color: #f9f9f9;
     cursor: pointer;
+}
+
+.settings-container select option {
+    padding: 8px;
+    background-color: #ffffff;
+    color: #333;
+}
+
+/* Close Button Styles */
+.settings-container button.close-icon {
+    position: absolute;          /* Position the button absolutely within the settings container */
+    top: 10px;                   /* Align 10px from the top */
+    right: 10px;                 /* Align 10px from the right */
+    font-size: 24px;             /* Set the size of the icon */
+    background: none;            /* Remove any background */
+    background-color: transparent; /* Ensure background-color is transparent */
+    border: none;                /* Remove any border */
+    cursor: pointer;             /* Change cursor to pointer on hover */
+    color: #666;                 /* Set icon color to gray in light mode */
+    padding: 0;                  /* Remove any padding */
+    margin: 0;                   /* Remove any margin */
+    outline: none;               /* Remove the default focus outline */
+    transition: color 0.3s ease; /* Smooth transition for color changes */
+}
+
+.settings-container button.close-icon:hover {
+    color: #555;                 /* Slightly darker gray on hover in light mode */
+}
+
+.settings-container button.close-icon:focus {
+    outline: 2px solid #007bff;  /* Adds a blue outline when focused */
+    border-radius: 4px;          /* Optional: Adds slight rounding to the outline */
+}
+
+/* Override background color in dark mode specifically for the close button */
+@media (prefers-color-scheme: dark) {
+    /* Specific close-icon styling */
+    #settings-overlay .settings-container button.close-icon {
+        background: none;                 /* Remove any background */
+        background-color: transparent;    /* Ensure background-color is transparent */
+        color: #bbb;                      /* Light gray suitable for dark backgrounds */
+    }
+    
+    /* Hover state in dark mode */
+    #settings-overlay .settings-container button.close-icon:hover {
+        color: #aaa;                      /* Slightly darker gray on hover in dark mode */
+    }
+    
+    /* Focus state in dark mode */
+    #settings-overlay .settings-container button.close-icon:focus {
+        outline: 2px solid #00aaff;       /* Light blue outline when focused in dark mode */
+    }
+    
+    /* Ensure that the general dark mode button styling does not affect the close button */
+    #settings-overlay .settings-container button:not(.close-icon) {
+        background-color: #868686;        /* Retain background color for other buttons */
+        color: #e0e0e0;                    /* Adjust text color for dark mode */
+    }
+    
+    /* Adjust other button hover states if necessary */
+    #settings-overlay .settings-container button:not(.close-icon):hover {
+        background-color: #777777;        /* Darker background on hover for other buttons */
+    }
+    
+    /* Ensure language select remains 115px wide in dark mode */
+    #language-select {
+        width: 115px;
+    }
 }
 
 /* Ensure the overlay is hidden by default */
@@ -269,7 +343,7 @@ button.option.incorrect:hover {
     display: none !important;
 }
 
-/* Dark mode styles */
+/* Dark mode general styles */
 @media (prefers-color-scheme: dark) {
     body {
         background-color: #121212;
@@ -301,8 +375,13 @@ button.option.incorrect:hover {
         color: #e0e0e0;
     }
 
-    #settings-overlay .settings-container button {
-        background-color: #007bff;
+    #settings-overlay .settings-container button:not(.close-icon) {
+        background-color: #868686; /* Retain background color for other buttons */
+        color: #e0e0e0;             /* Adjust text color for dark mode */
+    }
+
+    #settings-overlay .settings-container button:not(.close-icon):hover {
+        background-color: #777777; /* Darker background on hover for other buttons */
     }
 
     #score {
@@ -364,6 +443,18 @@ button.option.incorrect:hover {
 
     .tt-suggestion.tt-cursor {
         background-color: #555;
+    }
+
+    /* Style the language select in dark mode within settings */
+    #settings-overlay .settings-container select {
+        background-color: #444;
+        color: #e0e0e0;
+        border: 1px solid #555;
+    }
+
+    #settings-overlay .settings-container select option {
+        background-color: #444;
+        color: #e0e0e0;
     }
 }
 
