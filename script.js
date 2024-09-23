@@ -3,10 +3,14 @@
     const options = document.querySelectorAll('.option');
     const languageSelect = document.getElementById('language-select');
     const scoreLabel = document.getElementById('score');
-    const modeButton = document.getElementById('mode-button');
-    const modeOverlay = document.getElementById('mode-overlay');
-    const closeModeButton = document.getElementById('close-mode');
-    const applyModeButton = document.getElementById('apply-mode');
+    const settingsButton = document.getElementById('settings-button');
+    const settingsOverlay = document.getElementById('settings-overlay');
+    const closeSettingsButton = document.getElementById('close-settings');
+    const applySettingsButton = document.getElementById('apply-settings');
+    const answerInput = document.getElementById('answer-input');
+    const suggestionsContainer = document.getElementById('suggestions');
+    const quizOptionsContainer = document.getElementById('quiz-options');
+    const typeInputContainer = document.getElementById('type-input-container');
 
     let flags = [];
     let remainingFlags = [];
@@ -17,6 +21,7 @@
     let translations = {};
     const translationCache = {};
     let selectedPlaysets = ['africa', 'asia', 'europe', 'north_america', 'south_america', 'oceania']; // Default to all playsets
+    let gameMode = 'quiz'; // Default mode
 
     // Function to update the language flag
     function updateLanguageFlag() {
@@ -99,10 +104,21 @@
         flagImg.src = currentFlag.url;
         flagImg.onload = () => console.log(`Loaded: ${currentFlag.url}`);
         flagImg.onerror = () => console.error(`Error loading flag: ${currentFlag.url}`);
-        updateOptions();
+        
+        if (gameMode === 'quiz') {
+            updateOptions();
+            quizOptionsContainer.classList.remove('hidden');
+            typeInputContainer.classList.add('hidden');
+        } else if (gameMode === 'type') {
+            answerInput.value = '';
+            suggestionsContainer.innerHTML = '';
+            quizOptionsContainer.classList.add('hidden');
+            typeInputContainer.classList.remove('hidden');
+            answerInput.focus();
+        }
     }
 
-    // Update the options
+    // Update the options for Quiz mode
     function updateOptions() {
         const incorrectOptions = flags.filter(f => f !== currentFlag);
         shuffle(incorrectOptions);
@@ -129,29 +145,45 @@
     // Check the answer and update the UI
     function checkAnswer(selectedOption) {
         totalCount++;
-        options.forEach((button, index) => {
-            if (index === correctOption) {
-                button.classList.add('correct');
-            } else if (index === selectedOption) {
-                button.classList.add('incorrect');
+        if (gameMode === 'quiz') {
+            options.forEach((button, index) => {
+                if (index === correctOption) {
+                    button.classList.add('correct');
+                } else if (index === selectedOption) {
+                    button.classList.add('incorrect');
+                }
+                button.disabled = true;
+                button.blur();
+            });
+
+            if (selectedOption === correctOption) {
+                correctCount++;
+                remainingFlags = remainingFlags.filter(f => f !== currentFlag);
             }
-            button.disabled = true;
-            button.blur();
-        });
 
-        if (selectedOption === correctOption) {
-            correctCount++;
-            remainingFlags = remainingFlags.filter(f => f !== currentFlag);
+            updateScore();
+
+            setTimeout(nextFlag, 1000);
+        } else if (gameMode === 'type') {
+            const answer = answerInput.value.trim().toLowerCase();
+            const correctAnswer = (translations[currentFlag.country] || currentFlag.country).toLowerCase();
+
+            if (answer === correctAnswer) {
+                correctCount++;
+                remainingFlags = remainingFlags.filter(f => f !== currentFlag);
+                alert('Correct!');
+            } else {
+                alert(`Incorrect! The correct answer was: ${translations[currentFlag.country] || currentFlag.country}`);
+            }
+
+            updateScore();
+            nextFlag();
         }
-
-        updateScore();
-
-        setTimeout(nextFlag, 1000);
     }
 
     // Event listener for options using event delegation
     document.getElementById('options').addEventListener('click', (event) => {
-        if (event.target.classList.contains('option')) {
+        if (gameMode === 'quiz' && event.target.classList.contains('option')) {
             const index = Array.from(options).indexOf(event.target);
             if (index !== -1) {
                 checkAnswer(index);
@@ -159,55 +191,95 @@
         }
     });
 
+    // Event listener for answer input in Type mode
+    answerInput.addEventListener('input', () => {
+        const query = answerInput.value.trim().toLowerCase();
+        suggestionsContainer.innerHTML = '';
+
+        if (query.length === 0) {
+            return;
+        }
+
+        const suggestions = Object.values(translations).filter(countryName => countryName.toLowerCase().includes(query));
+
+        suggestions.slice(0, 5).forEach(suggestion => {
+            const div = document.createElement('div');
+            div.textContent = suggestion;
+            suggestionsContainer.appendChild(div);
+        });
+    });
+
+    // Event listener for clicking on suggestions
+    suggestionsContainer.addEventListener('click', (event) => {
+        if (event.target.tagName === 'DIV') {
+            answerInput.value = event.target.textContent;
+            suggestionsContainer.innerHTML = '';
+            checkAnswer();
+        }
+    });
+
+    // Event listener for pressing Enter in the answer input
+    answerInput.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            suggestionsContainer.innerHTML = '';
+            checkAnswer();
+        }
+    });
+
     // Event listener for language selection
     languageSelect.addEventListener('change', async (event) => {
         const language = event.target.value;
         await loadTranslations(language);
-        updateOptions();
+        if (gameMode === 'quiz') {
+            updateOptions();
+        }
         updateLanguageFlag();
     });
 
     // Set the initial language flag on page load
     updateLanguageFlag();
 
-    // Event listener for mode button
-    modeButton.addEventListener('click', () => {
-        modeOverlay.classList.remove('hidden');
+    // Event listener for settings button
+    settingsButton.addEventListener('click', () => {
+        settingsOverlay.classList.remove('hidden');
     });
 
-    // Event listener for apply mode button
-    applyModeButton.addEventListener('click', () => {
-        const checkboxes = document.querySelectorAll('input[name="playset"]:checked');
-        selectedPlaysets = Array.from(checkboxes).map(checkbox => checkbox.value);
+    // Event listener for apply settings button
+    applySettingsButton.addEventListener('click', () => {
+        const playsetCheckboxes = document.querySelectorAll('input[name="playset"]:checked');
+        selectedPlaysets = Array.from(playsetCheckboxes).map(checkbox => checkbox.value);
+
+        const modeRadio = document.querySelector('input[name="game-mode"]:checked');
+        gameMode = modeRadio.value;
 
         if (selectedPlaysets.length === 0) {
             alert('Please select at least one playset.');
             return;
         }
 
-        modeOverlay.classList.add('hidden');
+        settingsOverlay.classList.add('hidden');
         correctCount = 0;
         totalCount = 0;
         updateScore();
-        fetchFlags(); // Reload flags based on the selected playsets
+        fetchFlags(); // Reload flags based on the selected playsets and mode
     });
 
-    // Event listener for close mode button
-    closeModeButton.addEventListener('click', () => {
-        modeOverlay.classList.add('hidden');
+    // Event listener for close settings button
+    closeSettingsButton.addEventListener('click', () => {
+        settingsOverlay.classList.add('hidden');
     });
 
     // Event listener for background click to close overlay
-    modeOverlay.addEventListener('click', (event) => {
-        if (event.target === modeOverlay) {
-            modeOverlay.classList.add('hidden');
+    settingsOverlay.addEventListener('click', (event) => {
+        if (event.target === settingsOverlay) {
+            settingsOverlay.classList.add('hidden');
         }
     });
 
     // Load the initial language and flags data
     (async () => {
         await loadTranslations('en'); // Default to English
-        // selectedPlaysets is already initialized with all playsets
         fetchFlags();
     })();
 

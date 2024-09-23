@@ -6,7 +6,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
     text-align: center;
 }
 
@@ -22,12 +22,11 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    text-align: center; /* Ensure text alignment within the container */
 }
 
 .header {
     display: flex;
-    justify-content: center; /* Center the content */
+    justify-content: center;
     align-items: center;
     width: 100%;
     position: relative;
@@ -35,11 +34,11 @@ body {
 
 h1 {
     margin: 0;
-    flex-grow: 1; /* Ensure the title takes up the remaining space */
+    flex-grow: 1;
     text-align: center;
 }
 
-#mode-button {
+#settings-button {
     position: absolute;
     left: 20px;
     padding: 8px 12px;
@@ -57,14 +56,14 @@ h1 {
     background-color: #f9f9f9;
     font-size: 16px;
     appearance: none;
-    background-image: url('https://flagcdn.com/gb.svg'); /* Default flag image */
+    background-image: url('https://flagcdn.com/gb.svg');
     background-repeat: no-repeat;
     background-position: right 10px center;
     background-size: 24px;
-    padding-right: 40px; /* Add space for the flag */
+    padding-right: 40px;
     cursor: pointer;
-    position: absolute; /* Position it absolutely within the header */
-    right: 0; /* Align to the right of the header */
+    position: absolute;
+    right: 0;
 }
 
 #language-select option {
@@ -74,7 +73,7 @@ h1 {
 }
 
 #score {
-    color: #333; /* Ensure score text is visible in light mode */
+    color: #333;
 }
 
 #flag-container {
@@ -93,7 +92,7 @@ h1 {
     max-width: 100%;
     max-height: 100%;
     position: absolute;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Increased shadow around the image */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
 }
 
 #options {
@@ -104,13 +103,17 @@ h1 {
     align-items: center;
 }
 
+#quiz-options {
+    width: 100%;
+}
+
 button.option {
     width: 100%;
     max-width: 500px;
     padding: 14px;
     margin: 10px 0;
     font-size: 18px;
-    background-color: rgb(85, 85, 85); /* Updated button background color */
+    background-color: rgb(85, 85, 85);
     color: white;
     border: none;
     border-radius: 5px;
@@ -127,8 +130,41 @@ button.option.incorrect:hover {
     background-color: red !important;
 }
 
+#type-input-container {
+    width: 100%;
+    max-width: 500px;
+}
+
+#answer-input {
+    width: 100%;
+    padding: 14px;
+    font-size: 18px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+}
+
+#suggestions {
+    width: 100%;
+    max-width: 500px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-top: none;
+    box-sizing: border-box;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+#suggestions div {
+    padding: 10px;
+    cursor: pointer;
+}
+
+#suggestions div:hover {
+    background-color: #f0f0f0;
+}
+
 /* Styles for the overlay container */
-#mode-overlay {
+#settings-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -140,34 +176,34 @@ button.option.incorrect:hover {
     align-items: center;
 }
 
-.mode-container {
+.settings-container {
     background-color: white;
     color: #333;
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     text-align: center;
     max-width: 90%;
     width: 400px;
 }
 
-.mode-container h2 {
+.settings-container h2 {
     margin-top: 0;
     margin-bottom: 20px;
 }
 
-.mode-container label {
-    display: inline-block; /* Changed from block to inline-block */
-    margin-right: 15px; /* Add some spacing between radio buttons */
+.settings-container fieldset {
+    border: none;
+    margin-bottom: 20px;
+}
+
+.settings-container label {
+    display: block;
+    margin-bottom: 10px;
     font-size: 16px;
 }
 
-.mode-container input[type="radio"] {
-    margin-right: 10px;
-}
-
-.mode-container button {
-    margin-top: 20px;
+.settings-container button {
+    margin-top: 10px;
     padding: 10px 20px;
     background-color: #007bff;
     color: white;
@@ -204,36 +240,52 @@ button.option.incorrect:hover {
         color: #e0e0e0;
     }
 
-    #mode-overlay .mode-container {
+    #settings-overlay .settings-container {
         background-color: #333;
         color: #e0e0e0;
     }
 
-    #mode-overlay .mode-container button {
+    #settings-overlay .settings-container button {
         background-color: #007bff;
     }
 
     #score {
-        color: #e0e0e0; /* Ensure score text is visible in dark mode */
+        color: #e0e0e0;
     }
 
     button.option {
-        background-color: rgb(100, 100, 100); /* Dark mode button background color */
+        background-color: rgb(100, 100, 100);
         color: white;
     }
 
     button.option.correct,
     button.option.correct:hover {
-        background-color: #00c851 !important; /* Darker green for dark mode */
+        background-color: #00c851 !important;
     }
 
     button.option.incorrect,
     button.option.incorrect:hover {
-        background-color: #ff4444 !important; /* Darker red for dark mode */
+        background-color: #ff4444 !important;
     }
 
     button.option:hover:not(.correct):not(.incorrect) {
-        background-color: rgb(150, 150, 150); /* Lighter hover color for dark mode */
+        background-color: rgb(150, 150, 150);
+    }
+
+    #answer-input {
+        background-color: #1e1e1e;
+        color: #e0e0e0;
+        border: 1px solid #555;
+    }
+
+    #suggestions {
+        background-color: #333;
+        color: #e0e0e0;
+        border: 1px solid #555;
+    }
+
+    #suggestions div:hover {
+        background-color: #444;
     }
 }
 
@@ -262,12 +314,12 @@ button.option.incorrect:hover {
     }
 
     button.option:hover {
-        background-color: rgb(85, 85, 85); /* Same as the normal background color */
+        background-color: rgb(85, 85, 85);
     }
 
     @media (prefers-color-scheme: dark) {
         button.option:hover {
-            background-color: rgb(100, 100, 100); /* Same as the normal background color in dark mode */
+            background-color: rgb(100, 100, 100);
         }
     }
 }
