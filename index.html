@@ -14,37 +14,43 @@
     <link rel="mask-icon" href="images/safari-pinned-tab.svg" color="#5bbad5">
     <meta name="msapplication-TileColor" content="#da532c">
     <meta name="theme-color" content="#ffffff">
+
+    <!-- Include Material Symbols for icons -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
     
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <button id="settings-button">Settings</button>
-            <h1>Flag Trainer</h1>
-            <select id="language-select">
-                <option value="en" data-flag="GB">English</option>
-                <option value="de" data-flag="DE">Deutsch</option>
-            </select>
+    <header class="header">
+        <button id="settings-button">Settings</button>
+        <h1>Flag Trainer</h1>
+        <select id="language-select">
+            <option value="en" data-flag="GB">English</option>
+            <option value="de" data-flag="DE">Deutsch</option>
+        </select>
+    </header>
+
+    <div id="score-container">
+        <div id="score">Score: 0%</div>
+    </div>
+    <div id="flag-container">
+        <img id="flag" src="" alt="Flag of a country">
+        <!-- Feedback Overlay -->
+        <div id="feedback-overlay" class="hidden">
+            <span id="feedback-icon" class="material-symbols-outlined"></span>
         </div>
-        <div id="score-container">
-            <div id="score">Score: 0%</div>
+    </div>
+    <div id="options">
+        <!-- Quiz Mode Options -->
+        <div id="quiz-options">
+            <button class="option"></button>
+            <button class="option"></button>
+            <button class="option"></button>
+            <button class="option"></button>
         </div>
-        <div id="flag-container">
-            <img id="flag" src="" alt="Flag of a country">
-        </div>
-        <div id="options">
-            <!-- Quiz Mode Options -->
-            <div id="quiz-options">
-                <button class="option"></button>
-                <button class="option"></button>
-                <button class="option"></button>
-                <button class="option"></button>
-            </div>
-            <!-- Type Mode Input -->
-            <div id="type-input-container" class="hidden">
-                <input type="text" id="answer-input" placeholder="Type your answer here">
-                <div id="suggestions"></div>
-            </div>
+        <!-- Type Mode Input -->
+        <div id="type-input-container" class="hidden">
+            <input type="text" id="answer-input" placeholder="Type your answer here">
+            <div id="suggestions"></div>
         </div>
     </div>
     
@@ -95,7 +101,6 @@
             <button id="close-settings">Close</button>
         </div>
     </div>
-    
     
     <script src="script.js"></script>
 </body>

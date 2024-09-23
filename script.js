@@ -92,6 +92,9 @@
 
     // Update the flag and options
     function nextFlag() {
+        const feedbackOverlay = document.getElementById('feedback-overlay');
+        feedbackOverlay.classList.add('hidden');
+
         if (remainingFlags.length === 0) {
             alert('No more flags in the selected playsets. Restarting...');
             remainingFlags = [...flags]; // Reset the flags
@@ -142,9 +145,26 @@
         scoreLabel.textContent = `Score: ${percentage}%`;
     }
 
+    // Show feedback overlay
+    function showFeedback(isCorrect) {
+        const feedbackOverlay = document.getElementById('feedback-overlay');
+        const feedbackIcon = document.getElementById('feedback-icon');
+
+        feedbackOverlay.classList.remove('correct', 'incorrect');
+        feedbackOverlay.classList.add(isCorrect ? 'correct' : 'incorrect');
+        feedbackOverlay.classList.remove('hidden');
+
+        if (isCorrect) {
+            feedbackIcon.textContent = 'check_circle'; // Material symbol for checkmark
+        } else {
+            feedbackIcon.textContent = 'cancel'; // Material symbol for cross
+        }
+    }
+
     // Check the answer and update the UI
     function checkAnswer(selectedOption) {
         totalCount++;
+
         if (gameMode === 'quiz') {
             options.forEach((button, index) => {
                 if (index === correctOption) {
@@ -156,28 +176,32 @@
                 button.blur();
             });
 
-            if (selectedOption === correctOption) {
+            const isCorrect = (selectedOption === correctOption);
+            if (isCorrect) {
                 correctCount++;
                 remainingFlags = remainingFlags.filter(f => f !== currentFlag);
             }
 
+            showFeedback(isCorrect);
             updateScore();
 
-            setTimeout(nextFlag, 1000);
+            setTimeout(nextFlag, 1500);
+
         } else if (gameMode === 'type') {
             const answer = answerInput.value.trim().toLowerCase();
             const correctAnswer = (translations[currentFlag.country] || currentFlag.country).toLowerCase();
 
-            if (answer === correctAnswer) {
+            const isCorrect = (answer === correctAnswer);
+
+            if (isCorrect) {
                 correctCount++;
                 remainingFlags = remainingFlags.filter(f => f !== currentFlag);
-                alert('Correct!');
-            } else {
-                alert(`Incorrect! The correct answer was: ${translations[currentFlag.country] || currentFlag.country}`);
             }
 
+            showFeedback(isCorrect);
             updateScore();
-            nextFlag();
+
+            setTimeout(nextFlag, 1500);
         }
     }
 
