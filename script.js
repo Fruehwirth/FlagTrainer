@@ -107,7 +107,11 @@
         currentFlag = remainingFlags[0];
         flagImg.src = currentFlag.url;
         flagImg.onload = () => console.log(`Loaded: ${currentFlag.url}`);
-        flagImg.onerror = () => console.error(`Error loading flag: ${currentFlag.url}`);
+        flagImg.onerror = () => {
+            console.error(`Error loading flag: ${currentFlag.url}`);
+            // Optionally, set a placeholder image
+            flagImg.src = 'images/flags/placeholder.png';
+        };
         
         if (gameMode === 'quiz') {
             updateOptions();
@@ -133,6 +137,7 @@
         optionsPool.forEach((optionFlag, index) => {
             const country = optionFlag.country;
             options[index].textContent = translations[country] || country;
+            options[index].setAttribute('data-country', country);
             options[index].classList.remove('correct', 'incorrect');
             options[index].disabled = false;
         });
@@ -178,6 +183,7 @@
 
         if (gameMode === 'quiz') {
             options.forEach((button, index) => {
+                const buttonCountry = button.getAttribute('data-country');
                 if (index === correctOption) {
                     button.classList.add('correct');
                 } else if (index === selectedOption) {
@@ -264,6 +270,14 @@
         }
     }
 
+    // Update Quiz Options Translations
+    function updateQuizOptionsTranslations() {
+        options.forEach((button) => {
+            const country = button.getAttribute('data-country');
+            button.textContent = translations[country] || country;
+        });
+    }
+
     // Event listener for options using event delegation
     document.getElementById('options').addEventListener('click', (event) => {
         if (gameMode === 'quiz' && event.target.classList.contains('option')) {
@@ -279,10 +293,10 @@
         const language = event.target.value;
         await loadTranslations(language);
         updateLanguageFlag();
-        initializeTypeahead(); // Reinitialize typeahead with new translations
         if (gameMode === 'quiz') {
-            updateOptions();
+            updateQuizOptionsTranslations();
         }
+        initializeTypeahead(); // Reinitialize typeahead with new translations
     });
 
     // Set the initial language flag on page load
