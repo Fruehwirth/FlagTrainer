@@ -350,8 +350,33 @@ button.option.incorrect:hover {
     background-color: #f0f0f0;
 }
 
-/* Dark mode adjustments */
+/* Ensure the overlay is hidden by default */
+.hidden {
+    display: none !important;
+}
+
+/* Dark mode styles - consolidated */
 @media (prefers-color-scheme: dark) {
+    /* General styles */
+    body {
+        background-color: #121212;
+        color: #e0e0e0;
+    }
+
+    header {
+        background-color: #1e1e1e;
+    }
+
+    #settings-button, #score {
+        color: #e0e0e0;
+    }
+
+    /* Progress bar */
+    #progress-bar {
+        background-color: #fff;
+    }
+
+    /* Settings styles */
     .settings-container {
         background-color: #1e1e1e;
         color: #e0e0e0;
@@ -378,28 +403,8 @@ button.option.incorrect:hover {
     .close-icon:hover {
         background-color: #2a2a2a;
     }
-}
 
-/* Ensure the overlay is hidden by default */
-.hidden {
-    display: none !important;
-}
-
-/* Dark mode general styles */
-@media (prefers-color-scheme: dark) {
-    body {
-        background-color: #121212;
-        color: #e0e0e0;
-    }
-
-    header {
-        background-color: #1e1e1e;
-    }
-
-    #settings-button {
-        color: #e0e0e0;
-    }
-
+    /* Game elements */
     #language-select {
         border: 1px solid #555;
         background-color: #333;
@@ -411,27 +416,8 @@ button.option.incorrect:hover {
         color: #e0e0e0;
     }
 
-    #settings-overlay .settings-container {
-        background-color: #333;
-        color: #e0e0e0;
-    }
-
-    #settings-overlay .settings-container button:not(.close-icon) {
-        background-color: #868686; /* Retain background color for other buttons */
-        color: #e0e0e0;             /* Adjust text color for dark mode */
-    }
-
-    #settings-overlay .settings-container button:not(.close-icon):hover {
-        background-color: #777777; /* Darker background on hover for other buttons */
-    }
-
-    #score {
-        color: #e0e0e0;
-    }
-
     button.option {
         background-color: rgb(100, 100, 100);
-        color: white;
     }
 
     button.option.correct,
@@ -450,20 +436,7 @@ button.option.incorrect:hover {
         border: 1px solid #555;
     }
 
-    /* Feedback overlay in dark mode */
-    #feedback-overlay {
-        background-color: rgba(0, 0, 0, 0.6);
-    }
-
-    #feedback-overlay.correct {
-        background-color: rgba(0, 128, 0, 0.6);
-    }
-
-    #feedback-overlay.incorrect {
-        background-color: rgba(255, 0, 0, 0.6);
-    }
-
-    /* Style the typeahead suggestion menu in dark mode */
+    /* Typeahead styles */
     .tt-menu {
         background-color: #333;
         border: 1px solid #555;
@@ -481,24 +454,11 @@ button.option.incorrect:hover {
     .tt-suggestion.tt-cursor {
         background-color: #555;
     }
-
-    /* Style the language select in dark mode within settings */
-    #settings-overlay .settings-container select {
-        background-color: #444;
-        color: #e0e0e0;
-        border: 1px solid #555;
-    }
-
-    #settings-overlay .settings-container select option {
-        background-color: #444;
-        color: #e0e0e0;
-    }
 }
-
 
 /* Apply hover styles only on devices that can hover */
 @media (hover: hover) {
     button.option:hover:not(.correct):not(.incorrect) {
-        background-color: rgb(50, 50, 50);
+        background-color: rgb(70, 70, 70);
     }
 }
