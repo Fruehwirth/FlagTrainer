@@ -19,7 +19,6 @@ header {
     background-color: #ffffff;
     padding: 20px;
     box-sizing: border-box;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
@@ -90,7 +89,6 @@ h1 {
     max-width: 100%;
     max-height: 100%;
     object-fit: contain; /* Maintain aspect ratio without stretching */
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
 }
 
 #feedback-overlay {
@@ -391,7 +389,6 @@ button.option.incorrect:hover {
 
     header {
         background-color: #1e1e1e;
-        box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
     }
 
     #settings-button {
@@ -540,7 +537,7 @@ button.option.incorrect:hover {
     top: 80px; /* Position it right under the header */
     left: 0;
     width: 0%; /* Start at 0% */
-    height: 2px; /* Thin line */
+    height: 4px; /* Thin line */
     background-color: #000;
     transition: width 0.3s ease;
     z-index: 99;
