@@ -73,19 +73,10 @@
 
             flags = allFlags;
             remainingFlags = [...flags];
-            preloadFlags();
             nextFlag();
         } catch (error) {
             console.error("Error fetching flags:", error);
         }
-    }
-
-    // Preload flag images
-    function preloadFlags() {
-        flags.forEach(flag => {
-            const img = new Image();
-            img.src = flag.url;
-        });
     }
 
     // Shuffle function
@@ -117,7 +108,7 @@
             // Optionally, set a placeholder image
             flagImg.src = 'images/flags/placeholder.png';
         };
-        
+
         if (gameMode === 'quiz') {
             updateOptions();
             quizOptionsContainer.classList.remove('hidden');
