@@ -1,4 +1,4 @@
-/* General Styles */
+/* Reset and Base Styles */
 body {
     font-family: Arial, sans-serif;
     background-color: #f0f0f0;
@@ -7,6 +7,7 @@ body {
     text-align: center;
 }
 
+/* Header Styles */
 header {
     position: fixed;
     top: 0;
@@ -26,32 +27,13 @@ h1 {
     margin-left: 30px;
     flex-grow: 1;
     text-align: left;
+    font-size: 24px;
 }
 
 #settings-button {
     position: static;
     font-size: 36px;
     cursor: pointer;
-    color: #333;
-}
-
-#language-select {
-    width: 115px; /* Fixed width as per request */
-    padding: 8px 12px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    appearance: none;
-    background-repeat: no-repeat;
-    background-position: right 10px center;
-    background-size: 24px;
-    padding-right: 40px;
-    cursor: pointer;
-}
-
-#language-select option {
-    padding: 8px;
-    background-color: #ffffff;
     color: #333;
 }
 
@@ -63,72 +45,52 @@ h1 {
     color: #333;
 }
 
+/* Game Container Layout */
+#game-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 90px;
+    max-width: 600px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    max-height: calc(100vh - 80px);
+    overflow-y: auto;
+}
+
+/* Flag Display Styles */
 #flag-container {
     width: 100%;
     max-width: 500px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 5px;
-    margin: 20px auto;
+    margin: 0;
 }
 
 .flag-wrapper {
-    display: flex; /* Changed from block to flex for better centering */
+    display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
     max-width: 500px;
-    height: 300px; /* Fixed height to constrain the flag */
+    height: 300px;
     margin: 0 auto;
-    overflow: hidden; /* Hide any overflow to maintain dimensions */
-    position: relative; /* Added to contain the absolutely positioned overlay */
+    overflow: hidden;
+    position: relative;
 }
 
 .flag-wrapper img {
     max-width: 100%;
     max-height: 100%;
-    object-fit: contain; /* Maintain aspect ratio without stretching */
+    object-fit: contain;
 }
 
-#feedback-overlay {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    display: none; /* Hidden by default */
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent to dim the flag */
-    z-index: 10; /* Ensure it's above the flag image */
-}
-
-#feedback-overlay.correct {
-    display: flex;
-    background-color: rgba(0, 128, 0, 0.5); /* Semi-transparent green */
-}
-
-#feedback-overlay.incorrect {
-    display: flex;
-    background-color: rgba(255, 0, 0, 0.5); /* Semi-transparent red */
-}
-
-#feedback-icon {
-    font-size: 100px;
-    color: white;
-}
-
-#feedback-text {
-    margin-top: 10px;
-    font-size: 24px;
-    color: white;
-}
-
-#feedback-text.hidden {
-    display: none;
-}
-
+/* Quiz Options Styles */
 #options {
     width: 100%;
     max-width: 500px;
@@ -163,10 +125,11 @@ button.option.incorrect:hover {
     background-color: red !important;
 }
 
+/* Type Input Styles */
 #type-input-container {
     width: 100%;
     max-width: 500px;
-    position: relative; /* For positioning the suggestion dropdown */
+    position: relative;
 }
 
 #answer-input {
@@ -180,56 +143,89 @@ button.option.incorrect:hover {
 
 #answer-input:focus {
     outline: none;
-    border-color: #555; /* Keeps the same border color when focused */
+    border-color: #555;
 }
 
-/* For dark mode */
-@media (prefers-color-scheme: dark) {
-    #answer-input:focus {
-        border-color: #555;
-    }
-}
-
-/* Hide the tt-hint input field */
-.tt-hint {
-    display: none;
-}
-
-/* Style the typeahead suggestion menu */
-.tt-menu {
-    background-color: #fff;
+/* Language Select Styles */
+#language-select {
+    width: 115px;
+    padding: 8px 12px;
+    font-size: 16px;
     border: 1px solid #ccc;
-    border-radius: 4px;
-    width: 100%;
-    max-width: 500px;
-    margin: 0 auto;
-    text-align: left;
-    box-shadow: 0 5px 10px rgba(0,0,0,.2);
-    position: absolute;
-    z-index: 1000;
+    border-radius: 5px;
+    appearance: none;
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 24px;
+    padding-right: 40px;
+    cursor: pointer;
 }
 
-.tt-suggestion {
-    padding: 10px;
-    cursor: pointer;
+#language-select option {
+    padding: 8px;
+    background-color: #ffffff;
     color: #333;
 }
 
-.tt-suggestion:hover {
-    background-color: #f0f0f0;
+/* Feedback Overlay Styles */
+#feedback-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 10;
 }
 
-.tt-suggestion.tt-cursor {
-    background-color: #e0e0e0;
+#feedback-overlay.correct {
+    display: flex;
+    background-color: rgba(0, 128, 0, 0.5);
 }
 
-/* Adjust the tt-menu to align with the input */
-.tt-menu {
+#feedback-overlay.incorrect {
+    display: flex;
+    background-color: rgba(255, 0, 0, 0.5);
+}
+
+#feedback-icon {
+    font-size: 100px;
+    color: white;
+}
+
+#feedback-text {
+    margin-top: 10px;
+    font-size: 24px;
+    color: white;
+}
+
+#feedback-text.hidden {
+    display: none;
+}
+
+/* Progress Bar Styles */
+#progress-bar {
+    position: fixed;
+    top: 76px;
     left: 0;
-    right: 0;
+    width: 0%;
+    height: 4px;
+    background-color: #000;
+    transition: width 0.3s ease;
+    z-index: 99;
 }
 
-/* Styles for the overlay container */
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+    #progress-bar {
+        background-color: #fff;
+    }
+}
+
+/* Settings Overlay Styles */
 #settings-overlay {
     position: fixed;
     top: 0;
@@ -495,57 +491,5 @@ button.option.incorrect:hover {
 @media (hover: hover) {
     button.option:hover:not(.correct):not(.incorrect) {
         background-color: rgb(50, 50, 50);
-    }
-}
-
-/* Add these new styles after the header styles and before #flag-container */
-#game-container {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 100%;
-    padding-left: 20px;
-    padding-right: 20px;
-    padding-top: 90px;
-    max-width: 600px;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-    max-height: calc(100vh - 80px); /* Prevent container from being taller than viewport minus header */
-    overflow-y: auto; /* Allow scrolling if content is too tall */
-}
-
-/* Update these existing styles */
-#flag-container {
-    width: 100%;
-    max-width: 500px;
-    margin: 0;
-}
-
-#options {
-    width: 100%;
-    max-width: 500px;
-    margin: 0;
-}
-
-/* Progress bar styles */
-#progress-bar {
-    position: fixed;
-    top: 80px; /* Position it right under the header */
-    left: 0;
-    width: 0%; /* Start at 0% */
-    height: 4px; /* Thin line */
-    background-color: #000;
-    transition: width 0.3s ease;
-    z-index: 99;
-}
-
-/* Dark mode adjustment for progress bar */
-@media (prefers-color-scheme: dark) {
-    #progress-bar {
-        background-color: #fff;
     }
 }
