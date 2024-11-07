@@ -180,6 +180,18 @@ button.option.incorrect:hover {
     text-align: left;
 }
 
+#answer-input:focus {
+    outline: none;
+    border-color: #555; /* Keeps the same border color when focused */
+}
+
+/* For dark mode */
+@media (prefers-color-scheme: dark) {
+    #answer-input:focus {
+        border-color: #555;
+    }
+}
+
 /* Hide the tt-hint input field */
 .tt-hint {
     display: none;
