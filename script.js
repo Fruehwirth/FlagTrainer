@@ -413,9 +413,15 @@
     // Event listeners for game mode radio buttons
     const gameModeRadios = document.querySelectorAll('input[name="game-mode"]');
     gameModeRadios.forEach(radio => {
-        radio.addEventListener('change', () => {
+        radio.addEventListener('change', async () => {
             if (radio.checked) {
                 gameMode = radio.value;
+                // Reset score
+                correctCount = 0;
+                totalCount = 0;
+                updateScore();
+                // Refetch flags to reset the current playset
+                await fetchFlags();
                 handleGameModeChange();
             }
         });
