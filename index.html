@@ -69,14 +69,12 @@
     <!-- Settings Overlay -->
     <div id="settings-overlay" class="hidden">
         <div class="settings-container">
-            <!-- Close Button as Material Symbol Icon -->
             <button id="close-settings" class="material-symbols-outlined close-icon" aria-label="Close settings">close</button>
-            
             <h2>Settings</h2>
-            <form id="settings-form">
-                <!-- Select Mode -->
-                <fieldset>
-                    <legend>Select Mode</legend>
+            
+            <div class="settings-section">
+                <h3>Game Mode</h3>
+                <div class="radio-group">
                     <label>
                         <input type="radio" name="game-mode" value="quiz" checked>
                         Quiz
@@ -85,10 +83,12 @@
                         <input type="radio" name="game-mode" value="type">
                         Type
                     </label>
-                </fieldset>
-                <!-- Select Playsets -->
-                <fieldset>
-                    <legend>Select Playsets</legend>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <h3>Regions</h3>
+                <div class="checkbox-group">
                     <label>
                         <input type="checkbox" name="playset" value="africa" checked>
                         Africa
@@ -113,17 +113,16 @@
                         <input type="checkbox" name="playset" value="oceania" checked>
                         Oceania
                     </label>
-                </fieldset>
-                <!-- Select Language -->
-                <fieldset>
-                    <legend>Select Language</legend>
-                    <select id="language-select">
-                        <option value="en" data-flag="gb">English</option>
-                        <option value="de" data-flag="de">Deutsch</option>
-                        <!-- Add more languages as needed -->
-                    </select>
-                </fieldset>
-            </form>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <h3>Language</h3>
+                <select id="language-select">
+                    <option value="en" data-flag="gb">English</option>
+                    <option value="de" data-flag="de">Deutsch</option>
+                </select>
+            </div>
         </div>
     </div>
 

@@ -226,117 +226,142 @@ button.option.incorrect:hover {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: rgba(0, 0, 0, 0.5);
     display: flex;
     justify-content: center;
     align-items: center;
+    backdrop-filter: blur(5px);
+    z-index: 1000;
 }
 
 .settings-container {
-    background-color: white;
+    background-color: #ffffff;
     color: #333;
-    padding: 20px;
-    border-radius: 10px;
-    text-align: center;
+    padding: 2rem;
+    border-radius: 16px;
+    text-align: left;
     max-width: 90%;
     width: 400px;
-    position: relative; /* To position the close icon */
+    position: relative;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
 }
 
 .settings-container h2 {
-    margin-top: 0;
-    margin-bottom: 20px;
+    margin: 0 0 1.5rem 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.settings-section {
+    margin-bottom: 1.5rem;
+}
+
+.settings-section h3 {
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 0.75rem;
+    color: #666;
 }
 
 .settings-container fieldset {
-    display: flex;
-    justify-content: space-around;
     border: none;
-    margin-bottom: 20px;
+    padding: 0;
+    margin: 0 0 1.5rem 0;
+}
+
+.settings-container legend {
+    display: none;
+}
+
+.radio-group, .checkbox-group {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 0.75rem;
 }
 
 .settings-container label {
-    display: inline-block;
-    margin-bottom: 10px;
-    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 8px;
+    transition: background-color 0.2s;
+}
+
+.settings-container label:hover {
+    background-color: #f5f5f5;
+}
+
+.settings-container input[type="radio"],
+.settings-container input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    margin: 0;
 }
 
 .settings-container select {
-    width: 115px; /* Fixed width as per request */
-    padding: 8px 12px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    appearance: none;
-    background-color: #f9f9f9;
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 0.9rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
     cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='%23666' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.5rem center;
 }
 
-.settings-container select option {
-    padding: 8px;
-    background-color: #ffffff;
-    color: #333;
+.close-icon {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    padding: 0.5rem;
+    cursor: pointer;
+    color: #666;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
 }
 
-/* Close Button Styles */
-.settings-container button.close-icon {
-    position: absolute;          /* Position the button absolutely within the settings container */
-    top: 10px;                   /* Align 10px from the top */
-    right: 10px;                 /* Align 10px from the right */
-    font-size: 24px;             /* Set the size of the icon */
-    background: none;            /* Remove any background */
-    background-color: transparent; /* Ensure background-color is transparent */
-    border: none;                /* Remove any border */
-    cursor: pointer;             /* Change cursor to pointer on hover */
-    color: #666;                 /* Set icon color to gray in light mode */
-    padding: 0;                  /* Remove any padding */
-    margin: 0;                   /* Remove any margin */
-    outline: none;               /* Remove the default focus outline */
-    transition: color 0.3s ease; /* Smooth transition for color changes */
+.close-icon:hover {
+    background-color: #f0f0f0;
 }
 
-.settings-container button.close-icon:hover {
-    color: #555;                 /* Slightly darker gray on hover in light mode */
-}
-
-.settings-container button.close-icon:focus {
-    outline: 2px solid #007bff;  /* Adds a blue outline when focused */
-    border-radius: 4px;          /* Optional: Adds slight rounding to the outline */
-}
-
-/* Override background color in dark mode specifically for the close button */
+/* Dark mode adjustments */
 @media (prefers-color-scheme: dark) {
-    /* Specific close-icon styling */
-    #settings-overlay .settings-container button.close-icon {
-        background: none;                 /* Remove any background */
-        background-color: transparent;    /* Ensure background-color is transparent */
-        color: #bbb;                      /* Light gray suitable for dark backgrounds */
+    .settings-container {
+        background-color: #1e1e1e;
+        color: #e0e0e0;
     }
-    
-    /* Hover state in dark mode */
-    #settings-overlay .settings-container button.close-icon:hover {
-        color: #aaa;                      /* Slightly darker gray on hover in dark mode */
+
+    .settings-section h3 {
+        color: #999;
     }
-    
-    /* Focus state in dark mode */
-    #settings-overlay .settings-container button.close-icon:focus {
-        outline: 2px solid #00aaff;       /* Light blue outline when focused in dark mode */
+
+    .settings-container label:hover {
+        background-color: #2a2a2a;
     }
-    
-    /* Ensure that the general dark mode button styling does not affect the close button */
-    #settings-overlay .settings-container button:not(.close-icon) {
-        background-color: #868686;        /* Retain background color for other buttons */
-        color: #e0e0e0;                    /* Adjust text color for dark mode */
+
+    .settings-container select {
+        background-color: #2a2a2a;
+        border-color: #444;
+        color: #e0e0e0;
     }
-    
-    /* Adjust other button hover states if necessary */
-    #settings-overlay .settings-container button:not(.close-icon):hover {
-        background-color: #777777;        /* Darker background on hover for other buttons */
+
+    .close-icon {
+        color: #999;
     }
-    
-    /* Ensure language select remains 115px wide in dark mode */
-    #language-select {
-        width: 115px;
+
+    .close-icon:hover {
+        background-color: #2a2a2a;
     }
 }
 
