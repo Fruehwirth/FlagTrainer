@@ -40,7 +40,7 @@ export class Game {
     }
 
     getNextFlag() {
-        if (this.remainingFlags.length === 0) {
+        if (this.remainingFlags.length <= 1) {
             this.remainingFlags = [...this.flags];
             this.correctCount = 0;
             this.totalCount = 0;
