@@ -37,33 +37,35 @@
         </div>
     </header>
 
-    <!-- Flag Display -->
-    <div id="flag-container">
-        <div class="flag-wrapper">
-            <img id="flag" src="images/flags/placeholder.png" alt="Flag of a country">
-            <!-- Feedback Overlay -->
-            <div id="feedback-overlay" class="hidden">
-                <span id="feedback-icon" class="material-symbols-outlined">check_circle</span>
-                <div id="feedback-text" class="feedback-text hidden"></div>
+    <!-- Game Container -->
+    <div id="game-container">
+        <div id="flag-container">
+            <div class="flag-wrapper">
+                <img id="flag" src="images/flags/placeholder.png" alt="Flag of a country">
+                <!-- Feedback Overlay -->
+                <div id="feedback-overlay" class="hidden">
+                    <span id="feedback-icon" class="material-symbols-outlined">check_circle</span>
+                    <div id="feedback-text" class="feedback-text hidden"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Options -->
+        <div id="options">
+            <!-- Quiz Mode Options -->
+            <div id="quiz-options">
+                <button class="option" data-country="Country1">Country1</button>
+                <button class="option" data-country="Country2">Country2</button>
+                <button class="option" data-country="Country3">Country3</button>
+                <button class="option" data-country="Country4">Country4</button>
+            </div>
+            <!-- Type Mode Input -->
+            <div id="type-input-container" class="hidden">
+                <input type="text" id="answer-input" placeholder="Type your answer here" autocomplete="off">
             </div>
         </div>
     </div>
 
-    <!-- Options -->
-    <div id="options">
-        <!-- Quiz Mode Options -->
-        <div id="quiz-options">
-            <button class="option" data-country="Country1">Country1</button>
-            <button class="option" data-country="Country2">Country2</button>
-            <button class="option" data-country="Country3">Country3</button>
-            <button class="option" data-country="Country4">Country4</button>
-        </div>
-        <!-- Type Mode Input -->
-        <div id="type-input-container" class="hidden">
-            <input type="text" id="answer-input" placeholder="Type your answer here" autocomplete="off">
-        </div>
-    </div>
-    
     <!-- Settings Overlay -->
     <div id="settings-overlay" class="hidden">
         <div class="settings-container">

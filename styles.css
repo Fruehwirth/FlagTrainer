@@ -8,6 +8,11 @@ body {
 }
 
 header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -128,11 +133,8 @@ h1 {
 
 #options {
     width: 100%;
-    max-width: 600px;
-    margin: 0 auto 20px auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    max-width: 500px;
+    margin: 0;
 }
 
 #quiz-options {
@@ -490,5 +492,50 @@ button.option.incorrect:hover {
 @media (hover: hover) {
     button.option:hover:not(.correct):not(.incorrect) {
         background-color: rgb(50, 50, 50);
+    }
+}
+
+/* Add these new styles after the header styles and before #flag-container */
+#game-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    max-width: 600px;
+    padding: 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    margin-top: 80px; /* Add margin to account for header height */
+    max-height: calc(100vh - 80px); /* Prevent container from being taller than viewport minus header */
+    overflow-y: auto; /* Allow scrolling if content is too tall */
+}
+
+/* Update these existing styles */
+#flag-container {
+    width: 100%;
+    max-width: 500px;
+    margin: 0;
+}
+
+#options {
+    width: 100%;
+    max-width: 500px;
+    margin: 0;
+}
+
+/* Add this media query for mobile responsiveness */
+@media (max-height: 700px) {
+    #game-container {
+        position: static;
+        transform: none;
+        margin: 80px auto 20px auto; /* Keep top margin for header */
+    }
+
+    body {
+        padding-top: 80px; /* Add padding to body to prevent content from going under header */
     }
 }
