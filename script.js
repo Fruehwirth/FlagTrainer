@@ -23,6 +23,9 @@
 
     let countries; // Typeahead dataset
 
+    let nextFlagImage = new Image();
+    let nextFlag = null;
+
     // Function to update the language flag in the language select
     function updateLanguageFlag() {
         const flag = languageSelect.options[languageSelect.selectedIndex].getAttribute('data-flag');
@@ -59,55 +62,78 @@
             if (selectedPlaysets.length === 0) {
                 alert('Please select at least one playset.');
                 return;
-            } else {
-                // Fetch flags for selected playsets
-                for (const playset of selectedPlaysets) {
-                    const response = await fetch(`playsets/${playset}.json`);
-                    if (!response.ok) {
-                        throw new Error(`Failed to fetch playset ${playset}: ${response.status}`);
-                    }
-                    const playsetFlags = await response.json();
-                    allFlags = allFlags.concat(playsetFlags);
+            }
+
+            for (const playset of selectedPlaysets) {
+                const response = await fetch(`playsets/${playset}.json`);
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch playset ${playset}: ${response.status}`);
                 }
+                const playsetFlags = await response.json();
+                allFlags = allFlags.concat(playsetFlags);
             }
 
             flags = allFlags;
             remainingFlags = [...flags];
-            nextFlag();
+            
+            // Get the first flag before showing it
+            nextFlag = getNextFlag();
+            await new Promise((resolve, reject) => {
+                nextFlagImage.onload = resolve;
+                nextFlagImage.onerror = reject;
+                nextFlagImage.src = nextFlag.url;
+            });
+            
+            showNextFlag();
         } catch (error) {
             console.error("Error fetching flags:", error);
         }
     }
 
-    // Shuffle function
     function shuffle(array) {
-        for (let i = array.length -1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i+1));
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
             [array[i], array[j]] = [array[j], array[i]];
         }
+        return array;
     }
 
-    // Update the flag and options
-    function nextFlag() {
-        const feedbackOverlay = document.getElementById('feedback-overlay');
-        feedbackOverlay.classList.add('hidden');
-
+    function getNextFlag() {
         if (remainingFlags.length === 0) {
-            alert('No more flags in the selected playsets. Restarting...');
-            remainingFlags = [...flags]; // Reset the flags
+            remainingFlags = [...flags];
             correctCount = 0;
             totalCount = 0;
             updateScore();
         }
-        shuffle(remainingFlags);
-        currentFlag = remainingFlags[0];
-        flagImg.src = currentFlag.url;
-        flagImg.onload = () => console.log(`Loaded: ${currentFlag.url}`);
-        flagImg.onerror = () => {
-            console.error(`Error loading flag: ${currentFlag.url}`);
-            // Optionally, set a placeholder image
-            flagImg.src = 'images/flags/placeholder.png';
+        
+        const index = Math.floor(Math.random() * remainingFlags.length);
+        return remainingFlags[index];
+    }
+
+    function preloadNextFlag() {
+        nextFlag = getNextFlag();
+        nextFlagImage.src = nextFlag.url;
+        nextFlagImage.onload = () => console.log(`Preloaded: ${nextFlag.url}`);
+        nextFlagImage.onerror = () => {
+            console.error(`Error preloading flag: ${nextFlag.url}`);
+            nextFlagImage.src = 'images/flags/placeholder.png';
         };
+    }
+
+    function showNextFlag() {
+        const feedbackOverlay = document.getElementById('feedback-overlay');
+        feedbackOverlay.classList.add('hidden');
+
+        if (nextFlag) {
+            currentFlag = nextFlag;
+            flagImg.src = nextFlagImage.src;
+        } else {
+            currentFlag = getNextFlag();
+            flagImg.src = currentFlag.url;
+        }
+
+        // Preload the next flag immediately
+        preloadNextFlag();
 
         if (gameMode === 'quiz') {
             updateOptions();
@@ -190,8 +216,7 @@
         // Optionally, set a timeout to hide the overlay after a delay
         setTimeout(() => {
             feedbackOverlay.classList.add('hidden');
-            // Proceed to the next flag or reset as needed
-            nextFlag();
+            showNextFlag();
         }, 1500); // 1.5 seconds delay
     }
 
@@ -400,7 +425,7 @@
     (async () => {
         await loadTranslations('en'); // Default to English
         initializeTypeahead();
-        fetchFlags();
+        await fetchFlags();
         updateLanguageFlag();
     })();
 

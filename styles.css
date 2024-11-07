@@ -456,33 +456,6 @@ button.option.incorrect:hover {
     }
 }
 
-/* Disable hover effect on mobile devices */
-@media (max-width: 600px) {
-    body {
-        height: auto;
-        padding: 10px;
-        overflow: auto;
-    }
-
-    #flag-container {
-        margin-top: 10px;
-    }
-
-    button.option {
-        font-size: 20px;
-        padding: 16px;
-    }
-
-    button.option:hover {
-        background-color: rgb(85, 85, 85);
-    }
-
-    @media (prefers-color-scheme: dark) {
-        button.option:hover {
-            background-color: rgb(100, 100, 100);
-        }
-    }
-}
 
 /* Apply hover styles only on devices that can hover */
 @media (hover: hover) {
@@ -498,8 +471,10 @@ button.option.incorrect:hover {
     left: 50%;
     transform: translate(-50%, -50%);
     width: 100%;
+    height: 600px;
+    padding-left: 20px;
+    padding-right: 20px;
     max-width: 600px;
-    padding: 20px;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
