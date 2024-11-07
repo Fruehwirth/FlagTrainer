@@ -533,3 +533,22 @@ button.option.incorrect:hover {
     max-width: 500px;
     margin: 0;
 }
+
+/* Progress bar styles */
+#progress-bar {
+    position: fixed;
+    top: 80px; /* Position it right under the header */
+    left: 0;
+    width: 0%; /* Start at 0% */
+    height: 2px; /* Thin line */
+    background-color: #000;
+    transition: width 0.3s ease;
+    z-index: 99;
+}
+
+/* Dark mode adjustment for progress bar */
+@media (prefers-color-scheme: dark) {
+    #progress-bar {
+        background-color: #fff;
+    }
+}

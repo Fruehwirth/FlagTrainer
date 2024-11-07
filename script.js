@@ -75,6 +75,7 @@
 
             flags = allFlags;
             remainingFlags = [...flags];
+            updateProgressBar();
             
             // Get the first flag before showing it
             nextFlag = getNextFlag();
@@ -104,6 +105,7 @@
             correctCount = 0;
             totalCount = 0;
             updateScore();
+            updateProgressBar();
         }
         
         const index = Math.floor(Math.random() * remainingFlags.length);
@@ -240,6 +242,7 @@
             if (isCorrect) {
                 correctCount++;
                 remainingFlags = remainingFlags.filter(f => f !== currentFlag);
+                updateProgressBar();
             }
 
             showFeedback(isCorrect);
@@ -256,6 +259,7 @@
             if (isCorrect) {
                 correctCount++;
                 remainingFlags = remainingFlags.filter(f => f !== currentFlag);
+                updateProgressBar();
                 showFeedback(true);
             } else {
                 const correctCountryName = translations[currentFlag.country] || currentFlag.country;
@@ -434,5 +438,13 @@
         await fetchFlags();
         updateLanguageFlag();
     })();
+
+    function updateProgressBar() {
+        const progressBar = document.getElementById('progress-bar');
+        const totalFlags = flags.length;
+        const remainingFlagsCount = remainingFlags.length;
+        const progress = ((totalFlags - remainingFlagsCount) / totalFlags) * 100;
+        progressBar.style.width = `${progress}%`;
+    }
 
 })();
