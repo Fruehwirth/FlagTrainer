@@ -18,11 +18,6 @@ export class Settings {
     }
 
     async initializeSettings() {
-        // Set all checkboxes to checked state on initialization
-        this.playsetCheckboxes.forEach(checkbox => {
-            checkbox.checked = true;
-        });
-        
         await this.loadTranslations('en'); // Default to English
         this.updateLanguageFlag();
     }

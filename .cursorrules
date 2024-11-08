@@ -6,6 +6,7 @@ Always write code, up to date, bug free, fully functional and working, secure, p
 Focus on readability over being performant.
 Fully implement all requested functionality.
 Be sure to reference file names.
+Make sure to also include imports when creating a new method or class
 Be concise. 
 Minimize any other prose.
 If you think there might not be a correct answer, say so. 
