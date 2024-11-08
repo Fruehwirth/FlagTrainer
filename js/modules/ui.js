@@ -128,7 +128,6 @@ export class UI {
             this.typeInputContainer.classList.add('hidden');
         } else if (this.game.gameMode === 'type') {
             this.answerInput.value = '';
-            $('#answer-input').typeahead('val', '');
             this.quizOptionsContainer.classList.add('hidden');
             this.typeInputContainer.classList.remove('hidden');
             this.answerInput.focus();

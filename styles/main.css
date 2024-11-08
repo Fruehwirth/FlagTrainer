@@ -435,25 +435,6 @@ button.option.incorrect:hover {
         color: #e0e0e0;
         border: 1px solid #555;
     }
-
-    /* Typeahead styles */
-    .tt-menu {
-        background-color: #333;
-        border: 1px solid #555;
-        box-shadow: 0 5px 10px rgba(255,255,255,0.1);
-    }
-
-    .tt-suggestion {
-        color: #e0e0e0;
-    }
-
-    .tt-suggestion:hover {
-        background-color: #444;
-    }
-
-    .tt-suggestion.tt-cursor {
-        background-color: #555;
-    }
 }
 
 /* Apply hover styles only on devices that can hover */

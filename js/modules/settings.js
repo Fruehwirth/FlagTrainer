@@ -56,7 +56,6 @@ export class Settings {
             if (this.game.gameMode === 'quiz') {
                 this.updateQuizOptionsTranslations();
             }
-            this.ui.initializeTypeahead();
         });
 
         // Playset checkboxes
@@ -147,7 +146,6 @@ export class Settings {
             this.ui.quizOptionsContainer.classList.add('hidden');
             this.ui.typeInputContainer.classList.remove('hidden');
             this.ui.answerInput.value = '';
-            $('#answer-input').typeahead('val', '');
             this.ui.answerInput.focus();
         }
     }
