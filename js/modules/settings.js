@@ -18,6 +18,11 @@ export class Settings {
     }
 
     async initializeSettings() {
+        // Set all checkboxes to checked state on initialization
+        this.playsetCheckboxes.forEach(checkbox => {
+            checkbox.checked = true;
+        });
+        
         await this.loadTranslations('en'); // Default to English
         this.updateLanguageFlag();
     }
@@ -117,8 +122,14 @@ export class Settings {
         this.game.correctCount = 0;
         this.game.totalCount = 0;
         this.ui.updateScore();
-        await this.game.fetchFlags();
-        this.ui.showNextFlag();
+        
+        // Fetch new flags before showing next flag
+        if (await this.game.fetchFlags()) {
+            this.game.currentFlag = null; // Reset current flag
+            this.game.nextFlag = null; // Reset next flag
+            this.ui.updateProgressBar();
+            this.ui.showNextFlag();
+        }
     }
 
     async handleGameModeChange(newMode) {
@@ -126,7 +137,12 @@ export class Settings {
         this.game.correctCount = 0;
         this.game.totalCount = 0;
         this.ui.updateScore();
-        await this.game.fetchFlags();
+        
+        // Fetch new flags before showing next flag
+        if (await this.game.fetchFlags()) {
+            this.game.currentFlag = null; // Reset current flag
+            this.game.nextFlag = null; // Reset next flag
+        }
         
         if (this.game.gameMode === 'quiz') {
             this.ui.quizOptionsContainer.classList.remove('hidden');
